@@ -1,10 +1,8 @@
-import logo from './logo.svg';
-import React, {useCallback, useState} from 'react'
-import ReactApexChart from "react-apexcharts";
+import React, {useState} from 'react'
 import './App.css';
 import Barchart from './Barchart'
 
-let unSortedArray = [7,2,4,1,6,8,12,20,25,40,30]
+let unSortedArray = [1,2,3,4,5,6,7,8,9,10]
 //BubbleSort Function
 
 function bubbleSort(unSortedArray){
@@ -37,22 +35,43 @@ function swap(currentArray, index1, index2,setter){
 }
 
 function App() {
-  const [currentArray , setArray] = useState(unSortedArray)
-  
-  function handleClick(){
+  const [currentArray , setArray] = useState([7, 5, 8, 2, 6, 1, 9, 3, 10, 4])
+
+  console.log(currentArray)
+
+
+  async function handleClick(){
     let newArraySet = bubbleSort(currentArray)
-    console.log(newArraySet)
-    newArraySet.forEach(element => {
-      setArray(element);
+    for (let i = 0; i < newArraySet.length ; i++ ){
+      await wait(200)
+      setArray(newArraySet[i]);
+    }
+  }
+
+  async function handleRandomer(){
+    let newArray = currentArray;
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    setArray(newArray)
+  }
+
+  function wait(ms){
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log("done waiting");
+        resolve(ms)
+      }, ms)
     })
   }
-  console.log('render')
+
   return (
     <div className="App">
       <Barchart currentArray = {currentArray}/>
-      <button className = "button" onClick = {handleClick}>Sort this shit</button>
+      <button onClick = {handleClick}>Sort the Array</button>
+      {/* <button onClick = {handleRandomer}>Randomize</button> */}
     </div>
   );
 }
-
 export default App;
